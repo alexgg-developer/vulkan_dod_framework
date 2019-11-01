@@ -1,0 +1,4 @@
+---Vulkan tips---
+
+-To deactivate depth pass -> RenderPass struct.
+-Positive Y go from top to bottom. So negative Y are up and positives Y are down. (You can swap the sign to think the Y axis)
