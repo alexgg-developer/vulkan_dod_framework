@@ -69,6 +69,7 @@
     <Import Project="GLFW.props" />
     <Import Project="stb.props" />
     <Import Project="tinyobjloader.props" />
+    <Import Project="spirv_reflectprops.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -153,13 +154,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="libs\spirv_reflect\spirv_reflect.c" />
     <ClCompile Include="src\apps\GLFWApp.cpp" />
     <ClCompile Include="src\apps\HelloModel.cpp" />
     <ClCompile Include="src\apps\HelloQuadIndexed.cpp" />
     <ClCompile Include="src\apps\HelloTexture.cpp" />
     <ClCompile Include="src\apps\HelloTriangleApplication.cpp" />
     <ClCompile Include="src\apps\ModelVisualizerApp.cpp" />
-    <ClCompile Include="src\apps\MovingTriangleApp.cpp" />
     <ClCompile Include="src\apps\TestApp.cpp" />
     <ClCompile Include="src\common\CommandManager.cpp" />
     <ClCompile Include="src\common\DebugUtils.cpp" />
@@ -167,12 +168,16 @@
     <ClCompile Include="src\common\EntityManager.cpp" />
     <ClCompile Include="src\common\FileUtils.cpp" />
     <ClCompile Include="src\common\IComponentManager.cpp" />
+    <ClCompile Include="src\common\IdManager.cpp" />
+    <ClCompile Include="src\common\MaterialMgr.cpp" />
     <ClCompile Include="src\common\MemoryPool.cpp" />
     <ClCompile Include="src\common\MemoryPoolGPU.cpp" />
     <ClCompile Include="src\common\MeshComponentMgr.cpp" />
+    <ClCompile Include="src\common\ModelLoader.cpp" />
     <ClCompile Include="src\common\MovementComponent.cpp" />
     <ClCompile Include="src\common\MovementSystem.cpp" />
     <ClCompile Include="src\common\QueueManager.cpp" />
+    <ClCompile Include="src\common\render_passes\BlinnPhongPass.cpp" />
     <ClCompile Include="src\common\TransformComponentMgr.cpp" />
     <ClCompile Include="src\common\UboDefinitions.cpp" />
     <ClCompile Include="src\common\VertexDefinitions.cpp" />
@@ -187,7 +192,6 @@
     <ClInclude Include="src\apps\HelloTexture.h" />
     <ClInclude Include="src\apps\HelloTriangleApplication.h" />
     <ClInclude Include="src\apps\ModelVisualizerApp.h" />
-    <ClInclude Include="src\apps\MovingTriangleApp.h" />
     <ClInclude Include="src\apps\TestApp.h" />
     <ClInclude Include="src\common\Assert.h" />
     <ClInclude Include="src\common\CommandManager.h" />
@@ -196,13 +200,18 @@
     <ClInclude Include="src\common\EntityManager.h" />
     <ClInclude Include="src\common\FileUtils.h" />
     <ClInclude Include="src\common\IComponentManager.h" />
+    <ClInclude Include="src\common\IdDeclarations.h" />
+    <ClInclude Include="src\common\IdManager.h" />
     <ClInclude Include="src\common\Instance.h" />
+    <ClInclude Include="src\common\MaterialMgr.h" />
     <ClInclude Include="src\common\MemoryPool.h" />
     <ClInclude Include="src\common\MemoryPoolGPU.h" />
     <ClInclude Include="src\common\MeshComponentMgr.h" />
+    <ClInclude Include="src\common\ModelLoader.h" />
     <ClInclude Include="src\common\MovementComponent.h" />
     <ClInclude Include="src\common\MovementSystem.h" />
     <ClInclude Include="src\common\QueueManager.h" />
+    <ClInclude Include="src\common\render_passes\BlinnPhongPass.h" />
     <ClInclude Include="src\common\TransformComponentMgr.h" />
     <ClInclude Include="src\common\UboDefinitions.h" />
     <ClInclude Include="src\common\VertexDefinitions.h" />

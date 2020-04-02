@@ -10,12 +10,15 @@
 #include <array>
 //#include <unordered_map>
 
+#include "IdDeclarations.h"
+
 struct Vertex2D {
 	glm::vec2 pos;
 	glm::vec3 color;
 
 	static VkVertexInputBindingDescription getBindingDescription();
 	static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
+
 };
 
 struct Vertex {
@@ -24,6 +27,8 @@ struct Vertex {
 
 	static VkVertexInputBindingDescription getBindingDescription();
 	static std::array<VkVertexInputAttributeDescription, 2> getAttributeDescriptions();
+
+	bool operator==(const Vertex& other) const;
 };
 
 
@@ -39,6 +44,14 @@ struct TexturedVertex {
 };
 
 namespace std {
+	template<> struct hash<Vertex>
+	{
+		size_t operator()(Vertex const& vertex) const
+		{
+			return ((hash<glm::vec3>()(vertex.pos) ^ (hash<glm::vec3>()(vertex.color) << 1)) >> 1);
+		}
+	};
+
 	template<> struct hash<TexturedVertex> 
 	{
 		size_t operator()(TexturedVertex const& vertex) const 
@@ -47,3 +60,11 @@ namespace std {
 		}
 	};
 }
+
+template <typename T>
+struct Mesh {
+	std::vector<T> vertices;
+	std::vector<uint32_t> indexes;
+	std::string name;
+	materialExternalId_t material;
+};

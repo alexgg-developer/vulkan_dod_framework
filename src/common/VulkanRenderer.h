@@ -68,6 +68,11 @@ private:
 	VkDeviceMemory m_depthImageMemory = VK_NULL_HANDLE;
 	VkImageView m_depthImageView = VK_NULL_HANDLE;
 
+	VkImage m_textureImage = VK_NULL_HANDLE;
+	VkDeviceMemory m_textureImageMemory = VK_NULL_HANDLE;
+	VkImageView m_textureImageView = VK_NULL_HANDLE;
+	VkSampler m_textureSampler = VK_NULL_HANDLE;
+
 	VkFormat m_swapChainImageFormat;
 	VkExtent2D m_swapChainExtent;
 
@@ -157,7 +162,10 @@ private:
 	VkShaderModule createShaderModule(const std::vector<char>& code);
 	void createSyncObjects();
 	void createSwapChain();
+	void createTextureImage();
+	void createTextureSampler();
 	void createUniformBuffers();
+	uint32_t m_mipLevels = 0; //pending to remove and doing it better with a texture manager.
 	//void createVertexBuffer(const MeshComponentMgr& meshComponentMgr);
 	VkFormat findDepthFormat();
 	//QueueFamilyIndices findQueueFamilies(VkPhysicalDevice device);

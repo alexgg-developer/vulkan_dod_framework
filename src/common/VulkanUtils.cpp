@@ -1,4 +1,7 @@
 #include "VulkanUtils.h"
+#include "CommandManager.h"
+#include "FileUtils.h"
+#include "Assert.h"
 
 /*void vkUtils::createImage(
 	uint32_t width, 
@@ -95,4 +98,67 @@ uint32_t dodf::vkUtils::findMemoryType(
 
 	ASSERT(false && "failed to find suitable memory type!");
 	return UINT32_MAX;
+}
+
+void dodf::vkUtils::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, VkDevice device)
+{
+	//VkCommandBuffer commandBuffer = beginSingleTimeCommands();
+	//VkCommandBuffer commandBuffer = CommandManager::beginSingleUseCmdBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, pool, m_device);
+	//TO DO: Check if transfer is ok
+	auto poolType = CommandManager::Pool::TRANSFER;
+	VkCommandBuffer commandBuffer = CommandManager::beginSingleUseCmdBuffer(VK_COMMAND_BUFFER_LEVEL_PRIMARY, poolType, device);
+	VkBufferImageCopy region = {};
+	region.bufferOffset = 0;
+	region.bufferRowLength = 0;
+	region.bufferImageHeight = 0;
+	region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+	region.imageSubresource.mipLevel = 0;
+	region.imageSubresource.baseArrayLayer = 0;
+	region.imageSubresource.layerCount = 1;
+	region.imageOffset = { 0, 0, 0 };
+	region.imageExtent = {
+		width,
+		height,
+		1
+	};
+	vkCmdCopyBufferToImage(commandBuffer, buffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
+	//endSingleTimeCommands(commandBuffer);
+	CommandManager::endSingleUseCmdBuffer(commandBuffer, poolType, device);
+}
+
+std::vector<std::vector<VkDescriptorSetLayoutBinding>> dodf::vkUtils::reflectDescriptors(const std::string & shaderFilePath, const VkShaderStageFlags & shaderStageFlags)
+{
+	// Generate reflection data for the shader
+	auto shaderCode = FileUtils::readFile(shaderFilePath);
+	SpvReflectShaderModule module;
+	SpvReflectResult result = spvReflectCreateShaderModule(shaderCode.size(), shaderCode.data(), &module);
+	ASSERT(result == SPV_REFLECT_RESULT_SUCCESS);
+
+	uint32_t numDescriptorSets = 0;
+
+	spvReflectEnumerateDescriptorSets(&module, &numDescriptorSets, NULL);
+	ASSERT(result == SPV_REFLECT_RESULT_SUCCESS);
+
+	std::vector<std::vector<VkDescriptorSetLayoutBinding>> descriptorSets(numDescriptorSets);
+	for (unsigned int i = 0; i < numDescriptorSets; i++)
+	{
+		//descriptors[i] = {};
+		//descriptors[i].numBindings = module.descriptor_sets[i].binding_count;
+		std::vector<VkDescriptorSetLayoutBinding> bindings(module.descriptor_sets[i].binding_count);
+
+		for (unsigned int j = 0; j < module.descriptor_sets[i].binding_count; j++)
+		{
+			bindings[j] = VkDescriptorSetLayoutBinding{
+				module.descriptor_sets[i].bindings[j]->binding,
+				module.descriptor_sets[i].bindings[j]->descriptor_type,
+				1,
+				shaderStageFlags,
+				NULL
+			};
+		}
+		descriptorSets[i] = bindings;
+	}
+	spvReflectDestroyShaderModule(&module);
+
+	return descriptorSets;
 }

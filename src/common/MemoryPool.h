@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace dodf {
 	namespace MemoryPool {
 		void Initialize(size_t size);

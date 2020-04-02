@@ -64,3 +64,8 @@ bool TexturedVertex::operator==(const TexturedVertex& other) const
 {
 	return pos == other.pos && color == other.color && texCoord == other.texCoord;
 }
+
+bool Vertex::operator==(const Vertex& other) const
+{
+	return pos == other.pos && color == other.color;
+}

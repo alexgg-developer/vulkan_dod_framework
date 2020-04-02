@@ -1,5 +1,5 @@
 #include "GLFWApp.h"
-
+#include "..\common\MemoryPool.h"
 
 int GLFWApp::WIDTH = 800;
 int GLFWApp::HEIGHT = 600;
@@ -50,6 +50,7 @@ void GLFWApp::mainLoop()
 
 GLFWApp::~GLFWApp()
 {
+	dodf::MemoryPool::Destroy();
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }

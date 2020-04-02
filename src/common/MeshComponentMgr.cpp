@@ -5,6 +5,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+using namespace dodf;
 
 void MeshComponentMgr::allocate(size_t size)
 {
@@ -23,10 +24,14 @@ void MeshComponentMgr::allocate(size_t size)
 
 	m_data.indexCount = static_cast<uint32_t*>(m_buffer.data);
 	m_data.startIndexes = m_data.indexCount + size;
-	m_data.meshSizeInBytes = reinterpret_cast<unsigned long long*>(m_data.startIndexes) + size;
+	m_data.meshSizeInBytes = reinterpret_cast<unsigned long long*>(m_data.startIndexes + size) ;
 	m_data.startMesh = m_data.meshSizeInBytes + size;
 	m_data.gpuVertexbufferOffset = m_data.startMesh + size;
 	m_data.gpuIndexBufferOffset = m_data.gpuVertexbufferOffset + size;
+
+	//m_name = reinterpret_cast<char(*)[MESH_NAME_SIZE]>(m_data.gpuIndexBufferOffset + size);
+	m_name = reinterpret_cast<char(*)[MESH_NAME_SIZE]>(MemoryPool::Get(size * sizeof(char) * MESH_NAME_SIZE));
+	m_material = static_cast<materialExternalId_t*>(MemoryPool::Get(size * sizeof(materialExternalId_t)));
 
 	m_graphicsQueue = static_cast<Instance*>(MemoryPool::Get(size * (sizeof(Instance))));
 	m_graphicsQueueSize = 0;
