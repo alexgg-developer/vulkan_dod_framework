@@ -6,5 +6,5 @@
 	#else assert(x)
 	#endif
 #else
-	#define ASSERT(x) assert(x)
+	#define ASSERT(x) ((void)0)
 #endif

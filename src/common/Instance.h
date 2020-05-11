@@ -8,9 +8,12 @@ struct Instance
 private:
 	Instance(size_t i):i(i) { }
 public:
-	Instance():i(NO_VALUE) { }
-	size_t i;
 	const static size_t NO_VALUE = -1;
+	size_t i;
+	
+	Instance():i(NO_VALUE) { }
+		
 	static Instance create(size_t i) { Instance inst = { i }; return inst; }
+
 	inline bool isValid() const { return i != NO_VALUE; }
 };
